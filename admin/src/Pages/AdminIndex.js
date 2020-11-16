@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import '../static/css/AdminIndex.css'
 import { MessageOutlined, PieChartOutlined, FileAddOutlined, TagsOutlined } from '@ant-design/icons'
-
+import { Route } from 'react-router-dom'
+import AddArticle from './AddArticle'
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -49,13 +50,17 @@ function AdminIndex () {
         </Menu>
       </Sider>
       <Layout>
-        <Header style={{ background: '#fff', padding: 0 }} />
+        {/* <Header style={{ background: '#fff', padding: 0 }} /> */}
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>后台管理</Breadcrumb.Item>
             <Breadcrumb.Item>工作台</Breadcrumb.Item>
           </Breadcrumb>
-          <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>博客工作台.</div>
+          <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+            <div>
+              <Route path="/index/" exact component={AddArticle}></Route>
+            </div>
+          </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>JSPang.com</Footer>
       </Layout>
