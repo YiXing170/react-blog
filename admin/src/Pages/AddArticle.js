@@ -45,7 +45,12 @@ function AddArticle () {
   const selectTypeHandler = (value) => {
     setSelectType(value)
   }
+
+  //保存文章的方法
   const saveArticle = () => {
+
+    markedContent()  //先进行转换
+
     if (!selectedType) {
       message.error('必须选择文章类别')
       return false
@@ -62,7 +67,55 @@ function AddArticle () {
       message.error('发布日期不能为空')
       return false
     }
-    message.success('检验通过')
+
+    let dataProps = {}   //传递到接口的参数
+    dataProps.type_id = selectedType
+    dataProps.title = articleTitle
+    dataProps.article_content = articleContent
+    dataProps.introduce = introducemd
+    let datetext = showDate.replace('-', '/') //把字符串转换成时间戳
+    dataProps.addTime = (new Date(datetext).getTime()) / 1000
+
+    if (articleId == 0) {
+      console.log('articleId=:' + articleId)
+      dataProps.view_count = Math.ceil(Math.random() * 100) + 1000
+      axios({
+        method: 'post',
+        url: servicePath.addArticle,
+        data: dataProps,
+        withCredentials: true
+      }).then(
+        res => {
+          setArticleId(res.data.insertId)
+          if (res.data.isScuccess) {
+            message.success('文章保存成功')
+          } else {
+            message.error('文章保存失败');
+          }
+
+        }
+      )
+    } else {
+      dataProps.id = articleId
+      axios({
+        method: 'post',
+        url: servicePath.updateArticle,
+        header: { 'Access-Control-Allow-Origin': '*' },
+        data: dataProps,
+        withCredentials: true
+      }).then(
+        res => {
+
+          if (res.data.isScuccess) {
+            message.success('文章保存成功')
+          } else {
+            message.error('保存失败');
+          }
+
+
+        }
+      )
+    }
   }
   //从中台得到文章类别信息
   const getTypeInfo = () => {
